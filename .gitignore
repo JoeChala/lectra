@@ -1,0 +1,42 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+*.py[cod]
+*.so
+
+# Virtual environments
+.venv/
+
+# Environment variables
+.env
+.env.*
+
+# Keep the example environment
+!.env.example
+
+# Testing
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Type checking
+.pyrefly/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Local application data
+data/
+qdrant_data/
+
+# Jupyter
+.ipynb_checkpoints/
