@@ -1,4 +1,4 @@
-from backend.src.lectra.core.errors import (
+from lectra.core.errors import (
     ConfigurationError,
     LectraRAGError,
 )
