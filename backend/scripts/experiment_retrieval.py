@@ -1,6 +1,6 @@
 from lectra.domain.retrieval import Chunk
 from lectra.infrastructure.embeddings.ollama import OllamaEmbeddingProvider
-from lectra.infrastructure.langchain.retriever import LangChainRetriever
+from lectra.infrastructure.vector_store.langchain_memory import LangChainRetriever
 
 
 def main() -> None:
@@ -30,13 +30,14 @@ def main() -> None:
     for chunk, vector in zip(
         chunks,
         embeddings.embed_documents([chunk.content for chunk in chunks]),
+        strict=False,
     ):
         print(f"{chunk.id}:")
         print(f"  dimensions: {len(vector)}")
         print(f"  first 5 values: {vector[:5]}")
         print()
 
-    retriever = LangChainRetriever(chunks)
+    retriever = LangChainRetriever(chunks, embeddings)
 
     query = "How does CPU scheduling work?"
     results = retriever.retrieve(query, top_k=3)
