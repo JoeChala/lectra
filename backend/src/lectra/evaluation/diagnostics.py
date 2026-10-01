@@ -1,5 +1,6 @@
 from lectra.evaluation.retrieval_cases import RetrievalCase
 from lectra.services.retriever import Retriever
+from lectra.services.router import QueryRouter
 
 
 def print_retrieval_diagnostics(
@@ -42,3 +43,20 @@ def print_retrieval_diagnostics(
         print(f"Retrieved: {ranked_ids}")
         print(f"Top-1 hit: {top_1_hit}")
         print(f"First relevant rank: {first_relevant_rank}")
+
+
+def print_routing_diagnostics(
+    router: QueryRouter,
+    cases: list[RetrievalCase],
+) -> None:
+    """Print the strategy selected for each retrieval case."""
+
+    print("\n=== Laya Routing Diagnostics ===")
+
+    for case in cases:
+        decision = router.route(case.query)
+
+        print(f"\nQuery: {case.query}")
+        print(f"Expected topic: {case.topic}")
+        print(f"Query type: {case.query_type}")
+        print(f"Selected strategy: {decision.strategy}")
