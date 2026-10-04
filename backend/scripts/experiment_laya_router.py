@@ -13,8 +13,6 @@ QUERIES = [
 
 
 def main() -> None:
-    """Run the Laya retrieval-routing experiment."""
-
     router = LayaQueryRouter()
 
     print("=== Laya Retrieval Routing ===")
@@ -24,6 +22,9 @@ def main() -> None:
 
         print(f"\nQuery: {query}")
         print(f"Strategy: {decision.strategy}")
+        print(f"Probabilities: {decision.probabilities}")
+        print(f"Confidence: {decision.confidence:.4f}")
+        print(f"Answer confidence: {decision.answer_confidence:.4f}")
 
 
 if __name__ == "__main__":

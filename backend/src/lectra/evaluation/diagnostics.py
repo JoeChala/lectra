@@ -3,6 +3,53 @@ from lectra.services.retriever import Retriever
 from lectra.services.router import QueryRouter
 
 
+def print_routing_diagnostics(
+    router: QueryRouter,
+    retriever: Retriever,
+    cases: list[RetrievalCase],
+) -> None:
+    """Print routing decisions together with retrieval outcomes."""
+
+    print("\n=== Laya Routing Diagnostics ===")
+
+    for case in cases:
+        decision = router.route(case.query)
+
+        results = retriever.retrieve(
+            case.query,
+            top_k=3,
+        )
+
+        ranked_ids = [result.chunk.id for result in results]
+
+        relevant_ids = set(case.relevant_chunk_ids)
+
+        first_relevant_rank = next(
+            (
+                rank
+                for rank, chunk_id in enumerate(
+                    ranked_ids,
+                    start=1,
+                )
+                if chunk_id in relevant_ids
+            ),
+            None,
+        )
+
+        top_1_hit = bool(ranked_ids) and ranked_ids[0] in relevant_ids
+
+        print(f"\nQuery: {case.query}")
+        print(f"Topic: {case.topic}")
+        print(f"Type: {case.query_type}")
+        print(f"Strategy: {decision.strategy}")
+        print(f"Probabilities: {decision.probabilities}")
+        print(f"Confidence: {decision.confidence:.4f}")
+        print(f"Answer confidence: {decision.answer_confidence:.4f}")
+        print(f"Retrieved: {ranked_ids}")
+        print(f"Top-1 hit: {top_1_hit}")
+        print(f"First relevant rank: {first_relevant_rank}")
+
+
 def print_retrieval_diagnostics(
     name: str,
     retriever: Retriever,
@@ -43,20 +90,3 @@ def print_retrieval_diagnostics(
         print(f"Retrieved: {ranked_ids}")
         print(f"Top-1 hit: {top_1_hit}")
         print(f"First relevant rank: {first_relevant_rank}")
-
-
-def print_routing_diagnostics(
-    router: QueryRouter,
-    cases: list[RetrievalCase],
-) -> None:
-    """Print the strategy selected for each retrieval case."""
-
-    print("\n=== Laya Routing Diagnostics ===")
-
-    for case in cases:
-        decision = router.route(case.query)
-
-        print(f"\nQuery: {case.query}")
-        print(f"Expected topic: {case.topic}")
-        print(f"Query type: {case.query_type}")
-        print(f"Selected strategy: {decision.strategy}")

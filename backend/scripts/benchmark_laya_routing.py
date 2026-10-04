@@ -1,6 +1,9 @@
 from lectra.domain.retrieval_strategy import RetrievalStrategy
 from lectra.evaluation.corpus import BENCHMARK_CHUNKS
-from lectra.evaluation.diagnostics import print_retrieval_diagnostics
+from lectra.evaluation.diagnostics import (
+    print_retrieval_diagnostics,
+    print_routing_diagnostics,
+)
 from lectra.evaluation.metrics import evaluate
 from lectra.evaluation.retrieval_cases import HARD_RETRIEVAL_CASES
 from lectra.infrastructure.embeddings.ollama import OllamaEmbeddingProvider
@@ -58,11 +61,11 @@ def main() -> None:
 
     print("\n=== Laya Strategy Decisions ===")
 
-    for case in HARD_RETRIEVAL_CASES:
-        decision = router.route(case.query)
-
-        print(f"\nQuery: {case.query}")
-        print(f"Strategy: {decision.strategy}")
+    print_routing_diagnostics(
+        router=router,
+        retriever=routed_retriever,
+        cases=HARD_RETRIEVAL_CASES,
+    )
 
 
 if __name__ == "__main__":

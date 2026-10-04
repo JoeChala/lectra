@@ -77,4 +77,7 @@ class LayaQueryRouter(QueryRouter):
 
         return RetrievalDecision(
             strategy=strategy,
+            probabilities=answer["probabilities"],
+            confidence=answer["confidence"],
+            answer_confidence=answer["answer_confidence"],
         )

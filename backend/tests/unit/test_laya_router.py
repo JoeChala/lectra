@@ -27,10 +27,16 @@ def test_laya_router_returns_dense_strategy() -> None:
         router_class.return_value.predict.return_value = prediction
 
         router = LayaQueryRouter()
-
         decision = router.route("Explain how virtual memory works.")
 
     assert decision.strategy is RetrievalStrategy.DENSE
+    assert decision.probabilities == {
+        "dense": 0.8,
+        "bm25": 0.1,
+        "hybrid": 0.1,
+    }
+    assert decision.confidence == 0.5
+    assert decision.answer_confidence == 0.8
 
 
 def test_laya_router_returns_bm25_strategy() -> None:
@@ -54,10 +60,16 @@ def test_laya_router_returns_bm25_strategy() -> None:
         router_class.return_value.predict.return_value = prediction
 
         router = LayaQueryRouter()
-
         decision = router.route("What is the FIFO page replacement algorithm?")
 
     assert decision.strategy is RetrievalStrategy.BM25
+    assert decision.probabilities == {
+        "dense": 0.1,
+        "bm25": 0.8,
+        "hybrid": 0.1,
+    }
+    assert decision.confidence == 0.5
+    assert decision.answer_confidence == 0.8
 
 
 def test_laya_router_returns_hybrid_strategy() -> None:
@@ -81,10 +93,16 @@ def test_laya_router_returns_hybrid_strategy() -> None:
         router_class.return_value.predict.return_value = prediction
 
         router = LayaQueryRouter()
-
         decision = router.route("Compare FIFO and LRU page replacement.")
 
     assert decision.strategy is RetrievalStrategy.HYBRID
+    assert decision.probabilities == {
+        "dense": 0.1,
+        "bm25": 0.1,
+        "hybrid": 0.8,
+    }
+    assert decision.confidence == 0.5
+    assert decision.answer_confidence == 0.8
 
 
 def test_laya_router_rejects_empty_query() -> None:

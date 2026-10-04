@@ -8,3 +8,6 @@ class RetrievalDecision:
     """Represents a retrieval strategy selected for a query."""
 
     strategy: RetrievalStrategy
+    probabilities: dict[str, float]
+    confidence: float
+    answer_confidence: float
